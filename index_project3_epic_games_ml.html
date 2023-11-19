@@ -1,0 +1,144 @@
+<!DOCTYPE HTML>
+<!--
+	Caminar by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+<html>
+	<head>
+		<title>ML Benchmarking Models Prediction</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+	</head>
+	<body>
+
+		<!-- Header -->
+			<header id="header">
+				<div class="logo"><a style = "line-height: 0.5" href="#">ML Benchmarking Models Prediction</a></div>
+				<h2><i>- The Epic Games Ratings</i></h2>
+			</header>
+
+		<!-- Main -->
+			<section id="main">
+
+				<!-- One -->
+					<section id="one" class="wrapper style1">
+						<!--<div class="image fit flush">
+							<img src="images/" alt="" />
+						</div>-->
+
+						<div class="content"><ul>
+							<h3><b>Executive Summary</b></h3>
+
+							<p style="text-align:justify; color:#000000">This comprehensive project leveraged the extensive, private dataset from Epic Games, encompassing data from over 180 million users and more than 900 games. It addressed the challenge of missing age data in user profiles, crucial for regulatory compliance and market segmentation. Utilizing advanced machine learning techniques, the project successfully predicted user ages by categorizing them into distinct age groups and adopting a down-sampling strategy for efficient data handling. The <b>Multi-layer Perceptron (MLP)</b> models initially used were later enhanced with <b>Graph Convolutional Networks (GCN)</b> to better capture user-user relationships, achieving superior performance in age prediction. Additionally, based on the re-constructed graph data, we developed sophisticated models for predicting user game ratings using <b>K-Nearest Neighbors (KNN)</b> and <b>Random Forest (RF)</b> techniques, further refined with ensemble strategies. Finally, a <b>hybrid game recommendation system</b> was implemented, combining <b>collaborative and content-based filtering methods</b>, creating a personalized user experience on Epic Games' platform. This system not only improved user engagement but also provided strategic insights for future business and marketing initiatives.</p>
+							<br>
+
+
+
+							<h3><b>Data and Exploratory Data Analysis</b></h3>
+
+							<p style="text-align:justify; color:#000000">The proprietary database of Epic Games, containing confidential data, encompasses a vast array of unstructured user data (covering over 180 million users) and structured data pertaining to each game (encompassing more than 900 titles). The user-specific data includes elements such as user ID, gender, game ratings, reviews, age, total expenditure at Epic, and duration of membership, among others. Similarly, the game-related data comprises information like game titles, developers, release dates, genres, and average ratings.</p>
+
+							<p style="text-align:justify; color:#000000">A significant challenge with the user data is the prevalence of missing age information, with over 60% of users lacking this detail (noted as NaN). The age factor is crucial for Epic Games to comply with regulations concerning minors (under 18 years of age), especially since numerous games have age restrictions for players above 17 or 18. Furthermore, the age data is a valuable metric for predicting individual user revenue for Epic Games. Considering the vast size of our original dataset, eliminating users with missing age data still leaves us with a substantial volume of 80 million users. However, a thorough investigation is required to assess the impact and validity of excluding all users with unspecified age data. </p>
+
+							<p style="text-align:justify; color:#000000">We conducted a comparative analysis of the distribution of two key numerical variables in the user data – accumulated spending at Epic and the duration of membership with Epic – before and after the exclusion of missing values (NaNs). The analysis, as illustrated in the four figures below, reveals that the distributions of these variables retain their strictly left-skewed character even after the removal of NaNs. This observation suggests that the absence of age data does not follow a discernible pattern or reason. Consequently, we have grounds to hypothesize that the missing age data is likely <b>Missing Completely At Random (MCAR)</b>, indicating that the absence of this data is not tied to any underlying bias.</p>
+							<ul>
+								<img src="images/Project3_Epic_Games/Distribution_accumulated_spending_NA.png" width="500" height="300" alt="" /> &emsp;  &emsp;
+								<img src="images/Project3_Epic_Games/Distribution_accumulated_spending_no_NA.png" width="500" height="300" alt="" />
+								<br>
+								<img src="images/Project3_Epic_Games/Histogram_years _of_membership_NA.png" width="500" height="300" alt="" /> &emsp;  &emsp;
+								<img src="images/Project3_Epic_Games/Histogram_years_of_membership_no_NA.png" width="500" height="300" alt="" />
+							
+							</ul>
+
+							<p style="text-align:justify; color:#000000">Another issue we faced was the imbalance in age data, with the majority of users falling between 15 and 50 years old, and only a minimal number of users under 15 or over 50. To address this for internal compliance and to lay the groundwork for Epic's future initiatives, we framed the problem as a <b>multi-class classification</b> challenge. This approach was aimed at mitigating the imbalance. We categorized users into three groups: 'Minors' (younger than 18 years) were assigned <b>ordinal encoding 0</b>, 'Adults' (aged 18 to 39) received ordinal encoding 1, and 'Middle-Aged' users (over 39 years) were given ordinal encoding 2. To optimize computational resources, we employed a <b>down-sampling</b> strategy, selecting 1 million samples from the dataset that had complete age information. These samples were then transformed from unstructured to structured data frames, incorporating additional processes such as normalization and average aggregation to represent each user’s game rating.</p>
+
+							<br>
+			
+
+
+							<h3><b>MLP & GCN Modeling</b></h3>
+
+							<p style="text-align:justify; color:#000000">With the technical support provided by Epic Games, we successfully utilized the Nvidia RAPIDS service, enhanced by A100 GPU acceleration, to train basic <b>Multi-layer Perceptron (MLP)</b> models. These initial models were equipped with <b>softmax activation functions</b> and <b>L2 regularization</b>. Our testing process was thorough, involving 200 epochs, an 80:20 ratio for train-test splitting, a finely-tuned learning rate hyper-parameter, and cross-validation. The below table is the summary of the test results: </p>
+							<center><img src="images/Project3_Epic_Games/MLP_model_results.png" width="500" height="125" alt="" /></center><br>
+							<p style="text-align:justify; color:#000000">The test results indicated a clear trend: as we increased the number of layers in the models, they exhibited a greater propensity for overfitting. This was evident in the consistent <b>test F1 scores</b>, which remained around <b>0.86</b>. This observation underscores the need for a careful balance between model complexity and its predictive performance.</p>
+
+						
+							<p style="text-align:justify; color:#000000">To enhance our results, I suggested incorporating the relationships between similar users as an additional layer of information for our age prediction task. We hypothesized that if two users highly favor the same game, this shared preference could be a valuable indicator for predicting one user’s age based on the other's. To facilitate this, we downsampled our data, selecting a random subset of 60,000 users to optimize efficiency. This subset was then organized into a graph structure, where each user was represented as a node, with age, game ratings, and other variables as node attributes. Connections between users (user-user edges) were established when both had rated the same game with a score of 3.5 or higher. This resulted in over 500,000 edges. This network of information was then represented in a large <b>adjacency matrix</b>, setting the stage for the application of <b>Graph Convolutional Networks (GCN)</b> models to predict user ages. The figure below illustrates the fundamental structure of this graph data:</p>
+							<center><img src="images/Project3_Epic_Games/Graph_structure.png" width="500" height="250" alt="" /></center><br>
+							<p style="text-align:justify; color:#000000">We then implemented normalization and average aggregation methods to represent game ratings per user within the node attributes. The GCN models were carefully designed, incorporating various layers, <b>ReLU activation functions</b>, different node embedding sizes, and a final <b>softmax</b> classification layer tailored for age prediction. For effective model training, we employed the <b>cross-entropy loss function</b> formulti-class classification, along with the Adam optimizer. The GCN models were trained using an 80:20 train-test split, with a meticulously tuned learning rate hyper-parameter and cross-validation to ensure robustness and accuracy in our predictions.</p>
+							<center><img src="images/Project3_Epic_Games/GCN_model_results.png" width="500" height="125" alt="" /></center><br>
+							<p style="text-align:justify; color:#000000">From the figure presented above, it becomes evident that the Graph Convolutional Networks (GCN) models, even with a considerably smaller dataset, outperformed the Multi-layer Perceptron (MLP) models. This superior performance can be attributed to their ability to capture additional user-user relationships. Specifically, a GCN model with just 2 layers and a node embedding size of 25 achieved an impressive <b>F1 test score of 0.91</b>. It was observed, however, that more complex GCN models tended to overfit in this scenario.</p>
+							<br>
+
+
+							<h3><b>Ensemble of KNN and RF Modeling</b></h3>
+
+							<p style="text-align:justify; color:#000000">Expanding on our existing graph data structure, our aim was to further explore user ratings for previously unrated games. We initially utilized the <b>K-Nearest Neighbors (KNN)</b> model as our baseline, with the <b>hyper-parameter k</b> optimally tuned to 8 through randomized search, resulting in a <b>test Root Mean Squared Error (RMSE) of 1.03</b>. To enhance performance, we incorporated the <b>Random Forest (RF)</b> model, finely tuning its <b>hyper-parameters to n_estimators = 200</b> and <b>max_depth = 20</b>, again determined through randomized search, to prevent overfitting. We then employed various <b>ensemble</b> techniques, combining the strengths of the KNN and RF models using <b>average, weighted average, and stacking strategies</b>. The most successful of these was the stacking ensemble approach, which achieved a significantly improved <b>test RMSE of 0.87</b>. The subsequent figure provides a comprehensive summary of the results from five different predictive models we deployed for assessing user game ratings:</p>
+							<center><img src="images/Project3_Epic_Games/Ensembles_KNN_RF.png" width="425" height="160" alt="" /></center><br>
+							<p style="text-align:justify; color:#000000">Based on the outcomes, we gathered evidence suggesting that both the KNN and RF models capture distinct patterns in rating prediction. These complementary relationships between the two models appear beneficial, potentially reducing errors when their predictions are combined. This synergy underscores the value of integrating different modeling approaches for more accurate results.</p>
+						
+							<br>
+
+
+							<h3><b>Game Recommendation System</b></h3>
+
+							<p style="text-align:justify; color:#000000">Additionally, our project set out to develop a straightforward game recommendation system tailored for individual users. Initially, we focused on traditional methodologies. Utilizing a sparse utility matrix comprising data from 1 million users and over 900 games, we began with the collaborative filtering method. This approach primarily considered observed user ratings, aggregating them into a comprehensive measure. We applied the below summed <b>Singular Value Decomposition (SVD) loss function</b>, enhanced with <b>L2 regularization</b>, to refine our recommendation model:</p>
+							<center><img src="images/Project3_Epic_Games/L2_SVD_equation.png" width="450" height="75" alt="" /></center><br>
+
+							<p style="text-align:justify; color:#000000">After fine-tuning the hyper-parameter k to 14, we achieved an optimal <b>test RMSE of 1.28</b>. We then enhanced our approach by integrating more detailed information about users and games from our original databases, utilizing a <b>content-based filtering method</b>. This involved building a unique regression model for each user, learning regression weights based on their interactions with games in Epic, including the games they played, their ratings for these games, and the characteristics of both the games and the users. Subsequently, we developed a <b>hybrid model</b> that combines the best aspects of both collaborative and content-based filtering. This model was trained over 200 epochs with a 20:80 weighted average. The most effective hybrid model achieved a remarkable <b>RMSE of 0.86</b>. Below, we have provided a summary of these results:</p>
+							<center><img src="images/Project3_Epic_Games/Hybrid_model_results.png" width="350" height="125" alt="" /></center><br>
+							<p style="text-align:justify; color:#000000">Leveraging our ensemble and hybrid models, we successfully created a comprehensive recommendation page for gamers. This page features the top three new games, ranked by the highest predicted ratings, while ensuring previously rated games by the user are excluded. Below is a screenshot of this recommendation page, personalized according to my own profile and the game ratings I have provided on Epic:</p>
+							<center><img src="images/Project3_Epic_Games/my_rec_sys.png" width="500" height="300" alt="" /></center><br>
+							
+
+
+							<h3><b>Limitations</b></h3>
+							<ul>
+								<li style="color:#000000; text-decoration:none">Although there was evidence suggesting that the missing values in our dataset exhibited Missing Completely At Random (MCAR) properties, it's possible that these NaNs could be Not Missing At Random (NMAR), particularly related to age, potentially introducing bias. For instance, users under 18 might choose not to disclose their ages to access age-restricted games.</li>
+								<li style="color:#000000; text-decoration:none">Utilizing Nvidia RAPIDS services enabled us to process the extensive dataset comprising millions of users efficiently. However, to conserve computational resources, we significantly downsampled the data from the original full dataset. This approach might lead to some sampling bias or reduced generalization performance.</li>
+								<li style="color:#000000; text-decoration:none">Our complex models, including MLP, GCN, and various ensembles, produced commendable predictive outcomes. However, their limited interpretability poses challenges, particularly when presenting our research to upper management or clients who may not have a technical background.</li>
+								<li style="color:#000000; text-decoration:none">It's important to note that the best RMSE does not always equate to the most effective recommendations. Thus, integrating human oversight and quality checks in the system is essential, regardless of its computational performance.</li>
+								
+							</ul>
+							<br>
+
+
+							<h3><b>References</b></h3>
+							<ul>
+								<li style="color:#000000; text-decoration:none">Adomavicius, Gediminas; Tuzhilin, Alexander (2015). Ricci, Francesco; Rokach, Lior; Shapira, Bracha (eds.). Recommender Systems Handbook. Springer US. pp. 191–226. doi:10.1007/978-1-4899-7637-6_6. ISBN 9781489976369.</li><br>
+								<li style="color:#000000; text-decoration:none">Enders, Craig K. (2010), Applied Missing Data Analysis, Guilford Press.</li><br>
+								<li style="color:#000000; text-decoration:none">Haykin, Simon (1998). Neural Networks: A Comprehensive Foundation(2 ed.). Prentice Hall. ISBN 0-13-273350-1.</li><br>
+								<li style="color:#000000; text-decoration:none">Kipf, T. N., & Welling, M. (2016). Semi-Supervised Classification with Graph Convolutional Networks. arXiv preprint arXiv:1609.02907.</li><br>
+								<li style="color:#000000; text-decoration:none">Lin, Yi; Jeon, Yongho (2006). "Random forests and adaptive nearest neighbors". Journal of the American Statistical Association. 101 (474): 578–590. CiteSeerX 10.1.1.153.9168.</li><br>
+								<li style="color:#000000; text-decoration:none">Samworth, Richard J. (2012). "Optimal weighted nearest neighbour classifiers". Annals of Statistics. 40 (5): 2733–2763. arXiv:1101.5783. doi:10.1214/12-AOS1049. S2CID 88511688.</li><br>
+								
+							</ul>
+
+
+
+		<!-- Footer -->
+			<footer id="footer">
+				<div class="container">
+					<ul class="icons">
+						<!--<li><a style="color:#404040;text-decoration:none" href="https://www.linkedin.com" class="icon fa-linkedin"><span class="label">LinkedIn</span></a></li> -->
+						<li><a style="color:#404040;text-decoration:none" href="https://github.com/yukunzGIT?tab=repositories" class="icon fa-github"><span class="label">GitHub</span></a></li>
+						<li><a style="color:#C0C0C0;text-decoration:none" href="mailto: ykzhang1211@g.ucla.edu" class="icon fa-envelope-o"><span class="label">Email</span></a></li>
+						<li><a style="color:#3B5998;text-decoration:none" href="https://www.facebook.com/yukun.zhang.7370" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+					</ul>
+				</div>
+				<div class="copyright" style="color:#383838">
+					&copy; All rights reserved. Design: <a style="color:#383838;text-decoration:none" href="https://templated.co">TEMPLATED</a>
+				</div>
+			</footer>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.poptrox.min.js"></script>
+			<script src="assets/js/skel.min.js"></script>
+			<!--<script src="assets/js/util.js"></script>-->
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

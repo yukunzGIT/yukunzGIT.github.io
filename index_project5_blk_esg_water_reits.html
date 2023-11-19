@@ -1,0 +1,141 @@
+<!DOCTYPE HTML>
+<!--
+	Caminar by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+<html>
+	<head>
+		<title>Troubled Waters ESG Investment Research Project</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+	</head>
+	<body>
+
+		<!-- Header -->
+			<header id="header">
+				<div class="logo"><a style = "line-height: 0.5" href="#">Troubled Waters ESG Investment Research Project</a></div>
+				<h2><i>- with BlackRock, Inc. under Dr. Yuxi Suo</i></h2>
+			</header>
+
+		<!-- Main -->
+			<section id="main">
+
+				<!-- One -->
+					<section id="one" class="wrapper style1">
+						<!--<div class="image fit flush">
+							<img src="images/" alt="" />
+						</div>-->
+
+						<div class="content"><ul>
+							<h3><b>Executive Summary</b></h3>
+
+							<p style="text-align:justify; color:#000000">In this comprehensive project, we as researchers combined non-public Bloomberg data and public records from the World Resources Institute (WRI) and the United Nations (UN) to investigate the impact of water stress on U.S. Real Estate Investment Trusts (REITs). The project, a subdivision of BlackRock's broader Troubled Waters Investment Research ESG Project, employed advanced data visualization techniques, including QGIS and Python, to create <b>multivariate dynamic 3D interactive maps</b>. These maps highlighted severe water scarcity in areas like coastal UK and California. Further, the study utilized a <b>quantile analysis model</b> to explore the effects of water stress on different tiers of U.S. REITs, revealing significant correlations between water allocation and stress levels with financial returns. To enhance prediction accuracy, the study transitioned from parametric to <b>non-parametric quantile regression models</b>, and developed new feature variables for a 10-year market projection. Utilizing machine learning methods, including <b>CNN, RNN and LSTM models</b>, we predicted a substantial increase in high water stress levels by 2030, which could have significant negative implications for the U.S. REITs market. This prediction, notably accurate with the LSTM model's <b>5% MAPE</b>, emphasizes the importance of considering environmental factors in real estate investment decisions, particularly in the face of escalating global water scarcity. This research offers valuable insights for future real estate investment strategies, highlighting the need to consider environmental factors like water scarcity.</p>
+							<br>
+
+
+
+							<h3><b>Data Introduction</b></h3>
+
+							<p style="text-align:justify; color:#000000">This project incorporated daily panel data from non-public Bloomberg sources, covering REITs daily returns (calculated on an annual rate basis) from 2014 to 2020, and the SNL database for REIT properties worldwide. Additionally, it used public water allocation and scarcity stress data from the World Resources Institute (WRI) and the United Nations (UN) World Water Development Report. The REITs data encompassed global financial details like the location (longitude and latitude) of the REITs property, its return in percentage and U.S. dollars, market value, operating costs, and insurance premiums. The water data included geographical information (longitude, latitude, and altitude) for various global regions, local population figures, average GDP per capita, precipitation levels, water allocation levels (ranging from 1 to 4), and water scarcity stress levels (ranging from 1 to 5).</p>
+							<p style="text-align:justify; color:#000000">It's important to note that while this project primarily focused on U.S. regions, it was part of the larger BlackRock Troubled Waters Investment Research ESG Project, which encompassed research in many other countries worldwide, including Malaysia, the Philippines, Japan, and Australia.</p>
+
+							
+							<br>
+			
+
+
+							<h3><b>Mapping Visualization</b></h3>
+
+							<p style="text-align:justify; color:#000000">To effectively visualize the comprehensive geographical water data with customizable settings, I employed QGIS and Python to develop a <b>multivariate dynamic 3D interactive map</b>. The foundational structure of this map is built upon data of longitude, latitude, and altitude, while an additional top layer provides the functionality for users to select from various variables, such as water scarcity stress levels. This interactive platform offers users the flexibility to zoom in, zoom out, rotate the view, switch between different Coordinate Reference Systems (CRS), modify the date, and save their customized output as a PNG file. Displayed below are two sample outputs, one for the southeast regions of the UK and the other for the west coast regions of California, USA:</p>
+							<ul>
+								&emsp;  &emsp;  &emsp; &emsp;  &emsp;  &emsp; &emsp;  &emsp;  &emsp;
+								<img src="images/Project5_Blackrock_Water/3D_mapping_east_UK.png" width="300" height="300" alt="" /> &emsp;  &emsp;  &emsp; &emsp;  &emsp;  &emsp;
+								<img src="images/Project5_Blackrock_Water/3D_mapping_west_CA.png" width="300" height="300" alt="" />
+
+							</ul>
+							<br>
+							<p style="text-align:justify; color:#000000">From the images above, it is evident that the coastal regions in the south of the UK and the west of California, USA, are experiencing severe water scarcity issues.</p>
+
+							<br>
+
+
+							<h3><b>Quantile Analysis Modeling (parametric and non-parametric) </b></h3>
+
+							<p style="text-align:justify; color:#000000">Based on the results from other team members (as seen in <a style="color:#0F52BA; text-decoration:none" href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3651583" target="_blank">the updated SSRN paper</a>), we have already established a clear association between water stress and REIT financial metrics. To delve deeper into the effects of water stress on U.S. REITs with varying return thresholds, we reformulated our research question. Specifically, we aimed to determine whether the association is significant for REITs with high returns, defined as those <b>in the upper 75% threshold</b>, and if so, to what extent.</p>
+							<p style="text-align:justify; color:#000000">In pursuit of this goal, we merged the two baseline datasets of REITs and water data from 2014 and developed a quantile analysis model. For each U.S. REIT property, we calculated the total annual return for 2014 using the following formula, which considers consecutive daily returns (notably, the total trading days in 2014 were 252, not 365):</p>
+							<center><img src="images/Project5_Blackrock_Water/Annual_return_formula.png" width="350" height="150" alt="" /></center><br>
+
+							<p style="text-align:justify; color:#000000">We categorized REITs based on their annual return percentages, defining high annual return REITs as those in the upper 75% threshold, middle return REITs at the 50% threshold, and low return REITs at the lower 25% threshold. The corresponding <b>Tau-quantiles</b> for these categories are 0.25, 0.50, and 0.75. The model incorporating these quantiles is presented as follows:</p>
+							<center><img src="images/Project5_Blackrock_Water/Quantile_model_full.png" width="800" height="400" alt="" /></center><br>
+
+							<p style="text-align:justify; color:#000000">Utilizing a 0.05 significance level, <b>the parametric quantile model</b> produced three regression lines corresponding to the 0.25, 0.50, and 0.75 tau values. The <b>p-values (Pr > |t|)</b> and coefficient estimates are summarized in the following table:</p>
+							<center><img src="images/Project5_Blackrock_Water/Quantile_regression_results.png" width="700" height="200" alt="" /></center><br>
+							<p style="text-align:justify; color:#000000">Since all the p-values are below the 0.05 alpha threshold, we observed significant effects of water allocation level and water stress level on REITs returns across different tiers. For instance, <b>for high-return REITs in the U.S. (0.75 tau), holding all other factors constant, an increase of one level in water allocation is associated with a 0.36% increase in REITs returns, while an increase of one level in water stress corresponds to a 0.46% decrease in returns</b>. These effects are more pronounced for high-return REITs compared to those with middle returns in the U.S. (0.50 tau). Utilizing the values for tau and our two regressors, we were able to predict the returns of U.S. REITs for the year 2014.</p>
+							
+							<p style="text-align:justify; color:#000000">To address potential non-linearity in our model predictions, we transitioned from a parametric quantile model to <b>non-parametric quantile regression models</b>, incorporating various values of the <b>penalization parameter lambda</b> (50, 75, 100, 125, 150, 175, and 200). A higher lambda value results in a smoother modeling line. Using the values of tau, lambda, and the two regressors, we compiled the prediction results for U.S. REITs returns into a <b>sensitivity benchmarking table</b>. The table provided below serves as an example, showcasing U.S. REITs returns with three different levels of water allocation and water stress:</p>
+							<center><img src="images/Project5_Blackrock_Water/Sensitivity_non-parametric_table.png" width="600" height="120" alt="" /></center><br>
+
+
+
+							<h3><b>CNN, RNN and LSTM Modeling for Multivariate Time Series Analysis</b></h3>
+
+							<p style="text-align:justify; color:#000000">To project the U.S. REITs markets and water stress over the next 10 years, we developed two new feature variables for our analysis. To moderate the extreme values in daily U.S. REITs returns, I utilized the median daily return from over 43,000 U.S. REITs properties between 2014 and 2020 as a representative measure of the overall daily U.S. REITs returns, recording it in the first new time series column. For the second variable, I calculated the <b>daily proportions of each water stress level (1-5)</b> across these properties to gauge the severity of water stress in the U.S., resulting in five new columns. I then updated the <b>Isolation Forest algorithm</b>, applying it with the <b>hyper-parameter 'contamination' set to 0.01</b> on these six columns, to remove extreme outliers for <b>anomaly detection</b>. </p>
+							<p style="text-align:justify; color:#000000">Given our focus on the most severe water stress levels (4 and 5), we extracted data only for these levels to conserve computational resources. For implementing machine learning on multivariate time series data, I conducted an 80:20 train-test split on these new columns, <b>maintaining the temporal order without shuffling</b>, and applied an <b>expanding window split with 20 folds</b> for <b>cross-validation</b>. To preserve the integrity of our data, we trained 2D <b>Convolutional Neural Network (CNN)</b> models using PyTorch Conv1d, short memory <b>Recurrent Neural Network (RNN)</b> models, and <b>Long Short-Term Memory (LSTM)</b> models. We summarized the prediction results for 265 days in 2030 by calculating the overall annual return using the previous formula and the average proportions of water stress levels 4 and 5 for the entirety of 2030. Below are the prediction results, including the <b>Mean Absolute Percentage Errors (MAPE)</b> on the test sets:</p>
+							<center><img src="images/Project5_Blackrock_Water/CNN_RNN_LSTM_results.png" width="750" height="150" alt="" /></center><br>
+							<p style="text-align:justify; color:#000000">Based on the predictive performance of the best model, the Long Short-Term Memory (LSTM) network, with a <b>MAPE of around 5%</b>, it is projected that by 2030 nearly <b>55%</b> of U.S. REIT properties will experience high water stress levels. This represents <b>a 120% increase</b> from the 25% level recorded in 2014. Such a substantial rise in water stress is likely to have significantly negative effects on the U.S. REITs market.</p>
+
+							<br>
+
+						
+
+							<h3><b>Limitations</b></h3>
+							<ul>
+								<li style="color:#000000; text-decoration:none">There may be some <b>multicollinearity</b> between the water allocation level (water in) and water stress level (water out). Although the <b>Variance Inflation Factor (VIF)</b> values for these two regressors were below 5 (specifically, 4.33) and their <b>correlation coefficient was -0.41</b>, these values are not low enough to completely dismiss the possibility of multicollinearity. For instance, a region with a higher water supply might tend to use more water, potentially influencing its water stress level.</li>
+								<li style="color:#000000; text-decoration:none">This research project primarily focused on the U.S. and might not be entirely applicable to other countries and regions around the world, particularly in areas with limited data availability. Nevertheless, the research methodologies and predictive modeling procedures developed in this study could still be applied effectively if sufficient relevant data are available.</li>
+								
+							</ul>
+							<br>
+
+
+							<h3><b>References</b></h3>
+							<ul>
+								<li style="color:#000000; text-decoration:none">Bertolotti, A., Luo, T., & Suo, Y. (2020, July 15). Impacts of Water Stress on Physical Assets Using REITs as a Case Study. SSRN.</li><br>
+								<li style="color:#000000; text-decoration:none">Cherkassky, Vladimir; Mulier, Filip (1994). Cheeseman, P.; Oldford, R. W. (eds.). "Statistical and neural network techniques for nonparametric regression". Selecting Models from Data. Lecture Notes in Statistics. New York, NY: Springer. doi:10.1007/978-1-4612-2660-4_39. ISBN 978-1-4612-2660-4.</li><br>
+								<li style="color:#000000; text-decoration:none">European Central Bank (2020, May), Guide on climate related and environmental risks.</li><br>
+								<li style="color:#000000; text-decoration:none">Ganguli, P., Kumar, D. & Ganguly, A.R. US Power Production at Risk from Water Stress in a Changing Climate. Sci Rep 7, 11983 (2017). https://doi.org/10.1038/s41598-017-12133-9.</li><br>
+								<li style="color:#000000; text-decoration:none">Hochreiter, Sepp; Schmidhuber, Jürgen (1997, Nov 01). "Long Short-Term Memory". Neural Computation.</li><br>
+								<li style="color:#000000; text-decoration:none">Koenker, Roger (2005). Quantile Regression. Cambridge: Cambridge University Press. pp. 2. ISBN 9780521845731.</li><br>
+								<li style="color:#000000; text-decoration:none">LeCun, Yann; Bengio, Yoshua (1995). "Convolutional networks for images, speech, and time series". In Arbib, Michael A. (ed.). The handbook of brain theory and neural networks (Second ed.). The MIT press.</li><br>
+								<li style="color:#000000; text-decoration:none">Malhotra, Pankaj; Vig, Lovekesh; Shroff, Gautam; Agarwal, Puneet (2015, April). "Long Short Term Memory Networks for Anomaly Detection in Time Series". European Symposium on Artificial Neural Networks, Computational Intelligence and Machine Learning – ESANN 2015.</li><br>
+								<li style="color:#000000; text-decoration:none">WRI (2020, May), Water: mapping, measuring and mitigating global water challenges.</li><br>
+								
+							</ul>
+
+
+
+		<!-- Footer -->
+			<footer id="footer">
+				<div class="container">
+					<ul class="icons">
+						<!--<li><a style="color:#404040;text-decoration:none" href="https://www.linkedin.com" class="icon fa-linkedin"><span class="label">LinkedIn</span></a></li> -->
+						<li><a style="color:#404040;text-decoration:none" href="https://github.com/yukunzGIT?tab=repositories" class="icon fa-github"><span class="label">GitHub</span></a></li>
+						<li><a style="color:#C0C0C0;text-decoration:none" href="mailto: ykzhang1211@g.ucla.edu" class="icon fa-envelope-o"><span class="label">Email</span></a></li>
+						<li><a style="color:#3B5998;text-decoration:none" href="https://www.facebook.com/yukun.zhang.7370" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+					</ul>
+				</div>
+				<div class="copyright" style="color:#383838">
+					&copy; All rights reserved. Design: <a style="color:#383838;text-decoration:none" href="https://templated.co">TEMPLATED</a>
+				</div>
+			</footer>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.poptrox.min.js"></script>
+			<script src="assets/js/skel.min.js"></script>
+			<!--<script src="assets/js/util.js"></script>-->
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

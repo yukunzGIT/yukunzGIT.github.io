@@ -1,0 +1,133 @@
+<!DOCTYPE HTML>
+<!--
+	Caminar by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+<html>
+	<head>
+		<title>US Stock Portfolio Return Analysis</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+	</head>
+	<body>
+
+		<!-- Header -->
+			<header id="header">
+				<div class="logo"><a style = "line-height: 0.5" href="#">US Stock Portfolio Return Analysis</a></div>
+				<h2><i>Class Final Project under Dr. Gordon B. Dahl, UCSD</i></h2>
+			</header>
+
+		<!-- Main -->
+			<section id="main">
+
+				<!-- One -->
+					<section id="one" class="wrapper style1">
+						<!--<div class="image fit flush">
+							<img src="images/" alt="" />
+						</div>-->
+
+						<div class="content"><ul>
+							<h3><b>Executive Summary</b></h3>
+
+							<p style="text-align:justify; color:#000000">Leveraging a combination of non-public financial data and public SEC information, this project provides a comprehensive visual analysis of stock market dynamics from 2008 to 2015, using advanced visualization tools and portfolio strategies. By integrating methods such as <b>Guppy Multiple Moving Average (GMMA), Bollinger Bands, and the Tom DeMark “9” indicator</b> into a user-friendly visualization platform, the project offers valuable insights into stock price movements. This system was particularly beneficial for beginner investors in recognizing signals for buying and selling stocks. Beyond analyzing individual stocks, we formulated and evaluated the performance of three portfolio strategies focusing on low volatility and high market capitalization, underscoring the advantage of <b>diversification</b> across various industries. Our findings over a five-year period demonstrated that a diversified portfolio strategy across various industries yielded better annualized returns than less diversified strategies, providing evidence for the advantages of diversification in stock investment portfolios. This research not only aids in understanding market trends but also guides investors in making informed decisions to optimize their investment returns</p>
+							<ul>
+								<li style="color:#000000; text-decoration:none">Here is the original visualization code in Pine Script (updated to version 5): [<a style="color:#0F52BA; text-decoration:none" href="docs/MA_systems_reversal_9.txt" target="_blank">Link</a>].</li>
+								
+							</ul>
+							<br>
+
+
+
+							<h3><b>Data Introduction</b></h3>
+
+							<p style="text-align:justify; color:#000000">In this project, we utilized non-public time series data from the UCSD Global Financial Database and TradingView, covering daily stock prices, market capitalizations, volatility, and daily returns from 2008 to 2015. Additionally, we incorporated public SEC data about the Standard Industrial Classification (SIC) codes for over 2,000 public companies. The daily stock price data encompassed the highest and lowest daily prices, as well as the opening and closing prices, while daily returns were recorded both in U.S. dollar values and as percentages. The SIC code, a four-digit number, classifies companies into specific business or industry types, with the first digit (ranging from 0 to 9) indicating the major category of the business or industry. These three datasets were then joined and merged based on company ID for further analysis.</p>
+							
+							<br>
+			
+
+
+							<h3><b>Pine Script Visualization</b></h3>
+
+							<p style="text-align:justify; color:#000000">To enhance the visualization with customizable settings, I developed a system incorporating <b>moving averages (MA), Guppy Multiple Moving Average (GMMA), and Bollinger Bands</b>. Additionally, I integrated the concept of <b>the reversal “9” indicator</b>, conceived by Tom DeMark, the founder of DeMARK Analytics. This approach is particularly user-friendly for beginners in stock investment, as it simplifies the interpretation of market signals. In this system, an upward reversal “9” is indicative of a local high point for stock prices, while a downward reversal “9” suggests a local low point. The figures below provide a more detailed illustration of the reversal “9” concept:</p>
+							<center><img src="images/Project7_Stock_Return/Reversal_9_up.png" width="780" height="320" alt="" /></center><br>
+							<center><img src="images/Project7_Stock_Return/Reversal_9_down.png" width="780" height="320" alt="" /></center><br>
+
+							<p style="text-align:justify; color:#000000">With the assistance of the <b>TradingView</b> platform, I successfully developed an all-in-one visualization using the <b>Pine Script programming language</b>, complete with customized settings. Below are the screenshots showcasing my visualization, which includes Bollinger Bands, GMMA, and the MA systems, specifically applied to Microsoft's stock price:</p>
+							<center><img src="images/Project7_Stock_Return/Bollinger_band_reversal_9.png" width="700" height="450" alt="" /></center><br>
+							<center><img src="images/Project7_Stock_Return/GMMA_reversal_9.png" width="700" height="450" alt="" /></center><br>
+							<center><img src="images/Project7_Stock_Return/MAs_reversal_9.png" width="700" height="450" alt="" /></center><br>
+
+							<p style="text-align:justify; color:#000000">From the aforementioned plots, it's easy to identify the local low points marked with the 🤢 symbol and the local high points indicated by the 🥰 symbol. These benchmarking points can serve as valuable indicators or signals for stock buying and selling actions.</p>
+
+							<br>
+
+
+							<h3><b>Portfolio Benchmarking</b></h3>
+
+							<p style="text-align:justify; color:#000000">Rather than focusing solely on individual stocks, investors often diversify by selecting a collection of stocks to mitigate potential volatility risks and maximize potential returns. Accordingly, we devised the following three simple portfolio strategies for benchmarking purposes:</p>
+							<ul>
+								<li style="color:#000000; text-decoration:none"><b>Strategy 1 (baseline) :</b> Selecting ten companies with the lowest stock price volatility.</li>
+								<li style="color:#000000; text-decoration:none"><b>Strategy 2 :</b> Selecting ten companies with the highest market capitalizations.</li>
+								<li style="color:#000000; text-decoration:none"><b>Strategy 3 :</b> Selecting the top company in each of the first ten SIC digits (0-9) based on the highest market capitalization.</li>
+								
+							</ul>
+
+							<p style="text-align:justify; color:#000000">To quantify the performance of our strategies, I calculated the annual return for the three stock portfolios over a period of five years, from 2011 to 2015, using the formula provided below. It's important to note that the total number of trading days in these years was less than 365. For instance, in 2012, there were only 250 trading days.</p>
+							<center><img src="images/Project7_Stock_Return/Stock_formula.png" width="440" height="200" alt="" /></center><br>
+
+							<p style="text-align:justify; color:#000000">I then summarized the <b>five-year annualized compounded return</b> for each strategy in the table below:</p>
+							<center><img src="images/Project7_Stock_Return/Portfolio_results.png" width="860" height="110" alt="" /></center><br>
+							<p style="text-align:justify; color:#000000">As a more diversified portfolio, the stock collection in Strategy 3 yielded a significantly better annualized return over a five-year horizon compared to the baseline strategy. This outcome provides evidence supporting the advantages of a diverse stock portfolio across various industries.</p>
+
+							<br>
+
+
+
+							<h3><b>Limitations</b></h3>
+							<ul>
+								<li style="color:#000000; text-decoration:none">The visualization code for this project was developed using <b>Pine Script</b>, a language specifically designed for stock and financial visualization, compatible exclusively with the <b>TradingView</b> platform. Despite not being written in more common programming languages like Python or Java, Pine Script benefits from the widespread use of TradingView, which boasts over 30 million users. The platform's Pine Script language is well-documented and offers free tutorials, making it accessible for users. Moreover, those who prefer not to use TradingView can easily translate this project's code into other programming languages.</li>
+								<li style="color:#000000; text-decoration:none">The focus of this project is primarily on visualization and comparing returns based on historical stock data; it does not provide tools for predicting future returns of stock portfolios. Users interested in forecasting stock prices should refer to other projects that employ more complex modeling techniques.</li>
+								<li style="color:#000000; text-decoration:none">Our analysis was limited to U.S. stock data, and the observed superior performance of more diversified portfolios might not necessarily extend to stock markets in other countries. Nonetheless, the benchmarking methods and visualization techniques developed in this project could still be valuable and applicable to stock markets worldwide.</li>
+								
+							</ul>
+							<br>
+
+
+							<h3><b>References</b></h3>
+							<ul>
+								<li style="color:#000000; text-decoration:none">Bollinger, John. (2002). Bollinger on Bollinger Bands. McGraw Hill.</li><br>
+								<li style="color:#000000; text-decoration:none">Cahen, Philippe. (2001). Dynamic Technical Analysis. Wiley.</li><br>
+								<li style="color:#000000; text-decoration:none">Hyndman, Rob J. (2009). Moving Averages. https://robjhyndman.com/papers/movingaverage.pdf. </li><br>
+								<li style="color:#000000; text-decoration:none">Mannes, John (2016). TradingView, a community for chart-obsessed investors, moves into new markets. TechCrunch. </li><br>
+								<li style="color:#000000; text-decoration:none">Murphy, John J. (1999). Technical Analysis of the Financial Markets (pp. 209–211). New York Institute of Finance.</li><br>
+								
+							</ul>
+
+
+
+		<!-- Footer -->
+			<footer id="footer">
+				<div class="container">
+					<ul class="icons">
+						<!--<li><a style="color:#404040;text-decoration:none" href="https://www.linkedin.com" class="icon fa-linkedin"><span class="label">LinkedIn</span></a></li> -->
+						<li><a style="color:#404040;text-decoration:none" href="https://github.com/yukunzGIT?tab=repositories" class="icon fa-github"><span class="label">GitHub</span></a></li>
+						<li><a style="color:#C0C0C0;text-decoration:none" href="mailto: ykzhang1211@g.ucla.edu" class="icon fa-envelope-o"><span class="label">Email</span></a></li>
+						<li><a style="color:#3B5998;text-decoration:none" href="https://www.facebook.com/yukun.zhang.7370" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+					</ul>
+				</div>
+				<div class="copyright" style="color:#383838">
+					&copy; All rights reserved. Design: <a style="color:#383838;text-decoration:none" href="https://templated.co">TEMPLATED</a>
+				</div>
+			</footer>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.poptrox.min.js"></script>
+			<script src="assets/js/skel.min.js"></script>
+			<!--<script src="assets/js/util.js"></script>-->
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
