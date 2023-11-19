@@ -1,0 +1,133 @@
+//@version=5
+//Author: Yukun (Edward) Zhang
+// Date Created: 2016-06-01
+// Last Updated: 2022-08-03
+
+indicator(title='Converted Script', shorttitle='CS', overlay=true)
+
+// The "9" indicator by Tom DeMark
+ref(_src, _back) =>
+    _src[_back]
+
+countUpCondition = close > ref(close, 4)
+countUp = ta.barssince(countUpCondition)
+
+isLastBar() =>
+    bar_index == ta.highest(bar_index, 100)
+
+between(_value, _low, _high) =>
+    _value >= _low and _value <= _high
+
+nineUpOther = isLastBar() and between(countUp, 5, 8)
+numberUpCondition2 = countUp == 9
+
+if numberUpCondition2
+    label.new(x=bar_index, y=high * 0.998, text='🤢', color=color.white, style=label.style_label_up)
+
+countDownCondition = close < ref(close, 4)
+countDown = ta.barssince(countDownCondition)
+nineDownOther = isLastBar() and between(countDown, 5, 8)
+
+numberDownCondition2 = countDown == 9
+
+if numberDownCondition2
+    label.new(x=bar_index, y=low * 1.005, text='🥰', color=color.white, style=label.style_label_down)
+
+// set up the options to choose among three visualizations: 
+at_show_bollingerband = input(false, title='Bollinger Band') // bollinger band
+at_show_gmma = input(false, title='GMMA Line') 				// GMMA 
+at_show_ma_system = input(true, title='MA System')  		// MA system
+at_ma_type = input.string('SMA', title='MA Types', options=['SMA', 'WMA', 'HMA', 'EMA'])
+at_ma_number = input.string('Full Display', title='MA numbers ', options=['Full Display', 'Double MAs'])
+
+// Various moving averages
+at_ma_len_1 = input.int(8, minval=1, title='Length')
+at_ma_len_2 = input.int(21, minval=1, title='Double MAs-short')
+at_ma_len_3 = input.int(34, minval=1, title='Length')
+at_ma_len_4 = input.int(55, minval=1, title='Double MAs-long')
+at_ma_len_5 = input.int(89, minval=1, title='Length')
+at_ma_len_6 = input.int(144, minval=1, title='Length')
+at_ma_len_7 = input.int(233, minval=1, title='Length')
+
+at_ma_graph_1 = ta.sma(close, at_ma_len_1)
+at_ma_graph_2 = ta.sma(close, at_ma_len_2)
+at_ma_graph_3 = ta.sma(close, at_ma_len_3)
+at_ma_graph_4 = ta.sma(close, at_ma_len_4)
+at_ma_graph_5 = ta.sma(close, at_ma_len_5)
+at_ma_graph_6 = ta.sma(close, at_ma_len_6)
+at_ma_graph_7 = ta.sma(close, at_ma_len_7)
+if at_ma_type == 'WMA'
+    at_ma_graph_1 := ta.wma(close, at_ma_len_1)
+    at_ma_graph_2 := ta.wma(close, at_ma_len_2)
+    at_ma_graph_3 := ta.wma(close, at_ma_len_3)
+    at_ma_graph_4 := ta.wma(close, at_ma_len_4)
+    at_ma_graph_5 := ta.wma(close, at_ma_len_5)
+    at_ma_graph_6 := ta.wma(close, at_ma_len_6)
+    at_ma_graph_7 := ta.wma(close, at_ma_len_7)
+    at_ma_graph_7
+if at_ma_type == 'EMA'
+    at_ma_graph_1 := ta.ema(close, at_ma_len_1)
+    at_ma_graph_2 := ta.ema(close, at_ma_len_2)
+    at_ma_graph_3 := ta.ema(close, at_ma_len_3)
+    at_ma_graph_4 := ta.ema(close, at_ma_len_4)
+    at_ma_graph_5 := ta.ema(close, at_ma_len_5)
+    at_ma_graph_6 := ta.ema(close, at_ma_len_6)
+    at_ma_graph_7 := ta.ema(close, at_ma_len_7)
+    at_ma_graph_7
+if at_ma_type == 'HMA'
+    at_ma_graph_1 := ta.hma(close, at_ma_len_1)
+    at_ma_graph_2 := ta.hma(close, at_ma_len_2)
+    at_ma_graph_3 := ta.hma(close, at_ma_len_3)
+    at_ma_graph_4 := ta.hma(close, at_ma_len_4)
+    at_ma_graph_5 := ta.hma(close, at_ma_len_5)
+    at_ma_graph_6 := ta.hma(close, at_ma_len_6)
+    at_ma_graph_7 := ta.hma(close, at_ma_len_7)
+    at_ma_graph_7
+
+plot(at_ma_graph_2, title='Graph_2', color=color.orange, transp=at_show_ma_system ? 0 : 100)
+plot(at_ma_graph_4, title='Graph_4', color=color.green, transp=at_show_ma_system ? 0 : 100)
+
+plot(at_ma_graph_1, title='Graph_1', color=color.red, transp=at_show_ma_system ? at_ma_number == 'Double MAs' ? 100 : 0 : 100)
+plot(at_ma_graph_3, title='Graph_3', color=color.yellow, transp=at_show_ma_system ? at_ma_number == 'Double MAs' ? 100 : 0 : 100)
+plot(at_ma_graph_5, title='Graph_5', color=color.blue, transp=at_show_ma_system ? at_ma_number == 'Double MAs' ? 100 : 0 : 100)
+plot(at_ma_graph_6, title='Graph_6', color=color.purple, transp=at_show_ma_system ? at_ma_number == 'Double MAs' ? 100 : 0 : 100)
+plot(at_ma_graph_7, title='Graph_7', color=color.black, transp=at_show_ma_system ? at_ma_number == 'Double MAs' ? 100 : 0 : 100)
+
+// The bolliger band
+at_bb_basis = ta.sma(close, 20)
+at_bb_dev = 2.0 * ta.stdev(close, 20)
+at_bb_upper = at_bb_basis + at_bb_dev
+at_bb_lower = at_bb_basis - at_bb_dev
+plot(at_bb_basis, 'Basis', color=#872323, transp=at_show_bollingerband ? 0 : 100)
+at_bb_p1 = plot(at_bb_upper, 'Upper', color=color.teal, transp=at_show_bollingerband ? 0 : 100)
+at_bb_p2 = plot(at_bb_lower, 'Lower', color=color.teal, transp=at_show_bollingerband ? 0 : 100)
+fill(at_bb_p1, at_bb_p2, title='Background', color=#198787, transp=at_show_bollingerband ? 95 : 100)
+
+
+// GMMA
+at_gmma_ema1 = ta.ema(close, 3)
+at_gmma_ema2 = ta.ema(close, 5)
+at_gmma_ema3 = ta.ema(close, 8)
+at_gmma_ema4 = ta.ema(close, 10)
+at_gmma_ema5 = ta.ema(close, 12)
+at_gmma_ema6 = ta.ema(close, 15)
+at_gmma_ema7 = ta.ema(close, 30)
+at_gmma_ema8 = ta.ema(close, 35)
+at_gmma_ema9 = ta.ema(close, 40)
+at_gmma_ema10 = ta.ema(close, 45)
+at_gmma_ema11 = ta.ema(close, 50)
+at_gmma_ema12 = ta.ema(close, 60)
+
+plot(at_gmma_ema1, color=color.green, title='s1', transp=at_show_gmma ? 0 : 100)  // s: short
+plot(at_gmma_ema2, color=color.green, title='s2', transp=at_show_gmma ? 0 : 100)
+plot(at_gmma_ema3, color=color.green, title='s3', transp=at_show_gmma ? 0 : 100)
+plot(at_gmma_ema4, color=color.green, title='s4', transp=at_show_gmma ? 0 : 100)
+plot(at_gmma_ema5, color=color.green, title='s5', transp=at_show_gmma ? 0 : 100)
+plot(at_gmma_ema6, color=color.green, title='s6', transp=at_show_gmma ? 0 : 100)
+
+plot(at_gmma_ema7, color=color.red, title='l1', transp=at_show_gmma ? 0 : 100)  // l: long
+plot(at_gmma_ema8, color=color.red, title='l2', transp=at_show_gmma ? 0 : 100)
+plot(at_gmma_ema9, color=color.red, title='l3', transp=at_show_gmma ? 0 : 100)
+plot(at_gmma_ema10, color=color.red, title='l4', transp=at_show_gmma ? 0 : 100)
+plot(at_gmma_ema11, color=color.red, title='l5', transp=at_show_gmma ? 0 : 100)
+plot(at_gmma_ema12, color=color.red, title='l6', transp=at_show_gmma ? 0 : 100)
