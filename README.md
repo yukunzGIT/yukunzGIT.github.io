@@ -1,2 +1,2 @@
 # yukunzGIT.github.io
-This is for my personal website. 
+This is the personal website for Yukun (Edward) Zhang.
